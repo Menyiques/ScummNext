@@ -1,0 +1,135 @@
+ScummNext: aventuras SCUMM en el ZX Spectrum Next
+=================================================
+
+Versión {VERSION}
+Copyright (C) 2026 smoralesg@gmail.com
+Software libre bajo la licencia GNU GPL, versión 3 o posterior (LICENCIA.txt).
+
+
+QUÉ ES
+------
+
+ScummNext es un intérprete de aventuras gráficas SCUMM v5 para el ZX Spectrum
+Next, escrito en ensamblador Z80N, con un conversor para Windows que prepara
+los ficheros de tu juego para la tarjeta SD.
+
+Está probado con The Secret of Monkey Island en su versión CD (VGA, SCUMM v5),
+jugado de principio a fin en un Next. Otro juego SCUMM v5 saldría en la lista,
+pero no está probado y lo más probable es que no funcione bien.
+
+ESTE PAQUETE NO TRAE NINGÚN JUEGO NI NADA SACADO DE NINGÚN JUEGO. Como en
+ScummVM, aquí solo está el motor: los gráficos, los textos y la música salen
+de tu propia copia original del juego.
+
+
+QUÉ HAY EN EL PAQUETE
+---------------------
+
+  ConversorScumm.exe    El conversor para Windows. Lee los ficheros de tu juego
+                        y prepara la carpeta que se copia a la SD del Next.
+                        Lleva el motor dentro y lo copia él solo.
+  scumm.nex             El motor, el programa que se abre en el Next. Está
+                        aquí por si preparas la tarjeta a mano.
+  fuente/               El código fuente completo: el motor (src/, Z80N) y las
+                        herramientas (tools/, Python), con su documentación
+                        técnica en fuente/README.md.
+  LICENCIA.txt          La licencia GNU GPL v3.
+  AVISOS_TERCEROS.txt   Lo que lleva el conversor de otros proyectos, con sus
+  licencias/            licencias.
+
+
+QUÉ HACE FALTA
+--------------
+
+- Un ZX Spectrum Next con 2 MB de memoria y su tarjeta SD. Mejor con ratón
+  Kempston, pero también se juega con el teclado.
+- Windows 10 u 11 de 64 bits para el conversor.
+- Tu copia del juego: los ficheros MONKEY.000 y MONKEY.001 del CD. Para la
+  música, las pistas de audio del CD en la misma carpeta, como Track1.fla ...
+  Track24.fla (FLAC, como las deja ScummVM) o en .wav. Sin pistas, el juego va
+  sin música.
+
+
+CÓMO SE USA
+-----------
+
+1. Abre ConversorScumm.exe. Como no está firmado, Windows puede avisar: pulsa
+   «Más información» y «Ejecutar de todas formas».
+
+2. Arriba está la carpeta de trabajo (de serie, Documentos\ScummNext). Es la
+   que acabará en la tarjeta.
+
+3. Pulsa «Convertir un juego…» y elige la carpeta donde están MONKEY.000 y
+   MONKEY.001 (y las pistas). El conversor dice qué juego es. Pon el nombre
+   que saldrá en el menú y la carpeta del juego en la tarjeta: de 1 a 8
+   letras o cifras, por ejemplo MONKEY. «Comprobar si cabe» lo mira sin
+   escribir nada. Puede tardar unos minutos, y al acabar dice si el juego
+   cabe en el Next.
+
+4. Copia la carpeta de trabajo entera a la SD del Next, por ejemplo como
+   /ScummNext.
+
+5. En el Next, desde el navegador de NextZXOS, entra en esa carpeta y abre
+   scumm.nex. Con un solo juego arranca directamente; con varios (hasta 9),
+   sale la lista: se elige con su cifra o con el ratón y se empieza con ENTER.
+
+Al reconvertir un juego se conservan sus partidas guardadas.
+
+La carpeta que prepara el conversor lleva los gráficos, los textos y la música
+de TU juego: es para tu uso y no se debe repartir.
+
+
+CONTROLES
+---------
+
+  Ratón (Kempston)                  Mover el cursor
+  CAPS SHIFT + 5 6 7 8              Mover el cursor con el teclado
+  Botón izquierdo o ENTER           Clic
+  Botón derecho o CAPS SHIFT+ENTER  Clic con el botón derecho
+  Letras y cifras                   Las teclas del juego (cada verbo la suya)
+  CAPS SHIFT + SPACE                ESC: saltar una escena
+  SYMBOL SHIFT + M                  Punto: cortar lo que se está diciendo
+  CAPS SHIFT + 1                    Menú de partidas
+
+
+PARTIDAS GUARDADAS
+------------------
+
+CAPS SHIFT + 1 abre el menú de partidas: 1-8 elige el hueco, G guarda, C carga,
+R reinicia el juego, S sale (el Next se reinicia), J cambia de juego (si hay
+más de uno en la tarjeta) y ESC vuelve al juego. Al guardar se le puede poner
+un nombre. Las partidas van en la carpeta de cada juego (SAVE1.DAT a
+SAVE8.DAT).
+
+El menú puede decir también por dónde va cada partida (un %), pero para eso
+hace falta un fichero PROGRESO.DAT, que sale de una partida grabada del propio
+juego y por eso no viene en el paquete. Sin él, todo funciona igual, sin el %.
+
+
+COMPILARLO
+----------
+
+Todo se puede rehacer desde fuente/, con Python 3 (NumPy), sjasmplus y
+PyInstaller: mira la sección «Reconstruir» de fuente/README.md.
+
+  python tools/build.py        el motor (build/scumm.nex)
+  python tools/build_exe.py    el conversor (build/exe/ConversorScumm.exe)
+
+
+LICENCIA
+--------
+
+ScummNext es software libre: puedes redistribuirlo y modificarlo bajo los
+términos de la GNU General Public License publicada por la Free Software
+Foundation, en su versión 3 o (a tu elección) cualquier versión posterior. Se
+distribuye con la esperanza de que sea útil, pero SIN NINGUNA GARANTÍA, ni
+siquiera la implícita de COMERCIABILIDAD o IDONEIDAD PARA UN FIN DETERMINADO.
+Los detalles están en LICENCIA.txt.
+
+ScummNext hace las cosas como ScummVM (https://www.scummvm.org), que también
+es GPL v3 o posterior: buena parte del motor y del conversor traduce su código
+y su documentación de SCUMM. Gracias al equipo de ScummVM.
+
+Monkey Island, SCUMM y LucasArts son marcas de Lucasfilm Ltd. ScummVM es una
+marca del equipo de ScummVM. ZX Spectrum Next es una marca de SpecNext Ltd.
+ScummNext no tiene relación con ninguno de ellos ni cuenta con su respaldo.

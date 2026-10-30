@@ -1,0 +1,42 @@
+Avisos de terceros
+==================
+
+ScummNext (el motor scumm.nex y el código de fuente/) es GPL v3 o posterior
+(LICENCIA.txt). Su forma de hacer las cosas sigue a ScummVM
+(https://www.scummvm.org, GPL v3 o posterior).
+
+scumm.nex no lleva nada de otros proyectos: está escrito entero en fuente/src
+y se ensambla con sjasmplus (https://github.com/z00m128/sjasmplus), que no
+queda dentro.
+
+ConversorScumm.exe es el conversor de fuente/tools empaquetado con PyInstaller.
+Además de nuestro código, lleva dentro lo siguiente, cada cosa con su licencia
+(los textos completos, en licencias/):
+
+  {PYTHON}PSF License. Lleva también OpenSSL (Apache
+                                2.0), zlib-ng, expat, mpdecimal, libffi, bzip2,
+                                XZ, Zstandard y el runtime de Microsoft Visual
+                                C++, cada uno con su licencia.
+                                licencias/Python_LICENSE.txt y
+                                licencias/Python_license.html
+                                https://www.python.org
+  Tcl/Tk 8.6 (tkinter)          Licencia BSD de Tcl/Tk.
+                                licencias/Tcl_Tk_license.terms
+                                https://www.tcl.tk
+{PAQUETES}
+  libsndfile                    GNU LGPL 2.1 o posterior, con librerías de
+  (dentro de soundfile)         FLAC, Ogg, Vorbis, Opus, LAME y mpg123 (LGPL y
+                                BSD).
+                                licencias/libsndfile_COPYING.txt y
+                                licencias/soundfile_license_notes.md
+                                Código fuente: https://github.com/libsndfile/libsndfile
+                                La versión exacta va en
+                                licencias/soundfile_license_notes.md.
+
+libsndfile va como una DLL aparte (libsndfile_x64.dll). Como la LGPL pide, se
+puede cambiar por otra versión: basta con poner la DLL nueva en el paquete
+soundfile y volver a hacer el .exe con fuente/tools/build_exe.py.
+
+El arranque de PyInstaller es GPL 2 o posterior con una excepción que permite
+distribuir programas hechos con él bajo cualquier licencia
+(licencias/PyInstaller_COPYING.txt, https://pyinstaller.org).

@@ -1,0 +1,8 @@
+# Lo de cada uno: el juego original, lo convertido, las partidas grabadas
+# y lo que se genera al compilar. Nada de esto se sube.
+original/
+build/
+*.pkl
+*.DAT
+__pycache__/
+src/gen/
