@@ -4,7 +4,8 @@ scumm.nex, y una carpeta por juego convertido, cada una con su GAME.DAT, su TITU
 ventana del conversor (tools/gui.py), sin ventana:
 
     juegos(raiz)                        los juegos que hay, con su estado
-    detectar(origen)                    que juego hay en una carpeta original
+    detectar(origen)                    que juego hay en una carpeta original (o una
+                                        imagen del CD: tools/cdimage.py)
     comprobar(origen, ...)              si cabe en el Next, sin escribir nada
     convertir(origen, raiz, carpeta, titulo, ...)
     a_su_carpeta(raiz, carpeta)         el juego suelto junto al .nex, a una carpeta
@@ -28,6 +29,7 @@ import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import cdimage as CI  # noqa: E402
 import convert as C  # noqa: E402
 import sound as SN  # noqa: E402
 
@@ -176,14 +178,15 @@ def carpeta_valida(nombre):
 
 
 def detectar(origen):
-    """Los juegos (los *.000) de una carpeta original: [dict(nombre, habitaciones,
-    salas, costumes, v5, pistas_usa, pistas_hay, error)]."""
+    """Los juegos (los *.000) de una carpeta original o de una imagen del CD:
+    [dict(nombre, habitaciones, salas, costumes, v5, pistas_usa, pistas_hay, error)]."""
     out = []
-    for p in sorted(glob.glob(os.path.join(origen, "*.000"))):
+    base = CI.carpeta(origen)
+    for p in sorted(glob.glob(os.path.join(base, "*.000"))):
         nombre = os.path.splitext(os.path.basename(p))[0]
         d = dict(nombre=nombre, habitaciones=0, salas=[], costumes=[], v5=False, pistas_usa=0,
                  pistas_hay=0, error=None)
-        if not os.path.exists(os.path.join(origen, nombre + ".001")):
+        if not os.path.exists(os.path.join(base, nombre + ".001")):
             d["error"] = "falta %s.001" % nombre
             out.append(d)
             continue

@@ -4,6 +4,8 @@
 
 CARPETA_DEL_JUEGO tiene NOMBRE.000 y NOMBRE.001 (por ejemplo MONKEY.000 y
 MONKEY.001 de tu CD). Si no se da NOMBRE, se busca el primer *.000 de la carpeta.
+Puede ser tambien una imagen del CD (.cue, .ccd, .iso, .img o .bin; tools/cdimage.py):
+los ficheros y la musica salen de ella.
 SALIDA es la carpeta de datos (por defecto build/data). Para tener varios juegos en
 la tarjeta, cada uno en una carpeta junto a scumm.nex (SALIDA = TARJETA/MONKEY, por
 ejemplo): al arrancar sale un menu para elegir. --titulo "Nombre" pone lo que se ve
@@ -83,6 +85,7 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import cdimage as CI  # noqa: E402
 import scumm as S  # noqa: E402
 import sound as SN  # noqa: E402
 
@@ -666,6 +669,7 @@ def objects_file(game):
 
 
 def find_game(folder, name=None):
+    folder = CI.carpeta(folder)             # (de una imagen de CD, la carpeta que sale)
     if name is None:
         cands = sorted(glob.glob(os.path.join(folder, "*.000")))
         if not cands:
@@ -884,7 +888,7 @@ def list_game(folder, name=None, player_costume=None):
 def main():
     import argparse
     ap = argparse.ArgumentParser(description="Convierte un juego SCUMM v5 para el Next.")
-    ap.add_argument("carpeta", help="carpeta con NOMBRE.000 y NOMBRE.001")
+    ap.add_argument("carpeta", help="carpeta con NOMBRE.000 y NOMBRE.001, o imagen del CD")
     ap.add_argument("nombre", nargs="?", help="por ejemplo MONKEY (por defecto, el primer .000)")
     ap.add_argument("salida", nargs="?", help="carpeta de datos (por defecto build/data)")
     ap.add_argument("--costume", type=int, help="costume del protagonista")
@@ -893,12 +897,15 @@ def main():
                     help="solo lista habitaciones y costumes, y dice si cabe")
     ap.add_argument("--titulo", help="el nombre en el menu de juegos (TITULO.TXT)")
     a = ap.parse_args()
-    if a.list:
-        ok = list_game(a.carpeta, a.nombre, a.costume)
-    else:
-        bad = []
-        convert(a.carpeta, a.nombre, a.salida, a.costume, a.room, title=a.titulo, problems=bad)
-        ok = not bad
+    try:
+        if a.list:
+            ok = list_game(a.carpeta, a.nombre, a.costume)
+        else:
+            bad = []
+            convert(a.carpeta, a.nombre, a.salida, a.costume, a.room, title=a.titulo, problems=bad)
+            ok = not bad
+    except CI.ErrorImagen as e:
+        sys.exit("%s: %s" % (a.carpeta, e))
     sys.exit(0 if ok else 1)
 
 

@@ -48,6 +48,10 @@ QUÉ HACE FALTA
   música, las pistas de audio del CD en la misma carpeta, como Track1.fla ...
   Track24.fla (FLAC, como las deja ScummVM) o en .wav. Sin pistas, el juego va
   sin música.
+  O, en lugar de todo eso, una imagen del CD: .cue con sus .bin (o .img o
+  .wav), CloneCD (.ccd con su .img) o .iso. El conversor saca de ella los
+  ficheros y la música. Un .iso solo lleva los datos: sin música. Las .mds,
+  .nrg y .chd hay que pasarlas antes a .cue/.bin.
 
 
 CÓMO SE USA
@@ -60,11 +64,11 @@ CÓMO SE USA
    que acabará en la tarjeta.
 
 3. Pulsa «Convertir un juego…» y elige la carpeta donde están MONKEY.000 y
-   MONKEY.001 (y las pistas). El conversor dice qué juego es. Pon el nombre
-   que saldrá en el menú y la carpeta del juego en la tarjeta: de 1 a 8
-   letras o cifras, por ejemplo MONKEY. «Comprobar si cabe» lo mira sin
-   escribir nada. Puede tardar unos minutos, y al acabar dice si el juego
-   cabe en el Next.
+   MONKEY.001 (y las pistas), con «Carpeta…», o la imagen del CD, con
+   «Imagen de CD…». El conversor dice qué juego es. Pon el nombre que saldrá
+   en el menú y la carpeta del juego en la tarjeta: de 1 a 8 letras o cifras,
+   por ejemplo MONKEY. «Comprobar si cabe» lo mira sin escribir nada. Puede
+   tardar unos minutos, y al acabar dice si el juego cabe en el Next.
 
 4. Copia la carpeta de trabajo entera a la SD del Next, por ejemplo como
    /ScummNext.

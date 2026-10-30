@@ -2,7 +2,11 @@
 
 Probado con ***The Secret of Monkey Island*** en su versión CD (VGA): jugado de principio a fin en un Next de verdad.
 
-> **No incluye ningún juego ni nada sacado de ningún juego.** Como en ScummVM, aquí solo está el motor: hace falta tu copia original (`MONKEY.000` y `MONKEY.001` del CD y, para la música, sus pistas de audio).
+> **No incluye ningún juego ni nada sacado de ningún juego.** Como en ScummVM, aquí solo está el motor: hace falta tu copia original (`MONKEY.000` y `MONKEY.001` del CD y, para la música, sus pistas de audio; o la imagen del CD).
+
+### Novedades
+
+- El conversor abre directamente la **imagen del CD**: `.cue` con sus `.bin`, `.img` o `.wav`, CloneCD (`.ccd` + `.img`) e `.iso`. Saca de ella `MONKEY.000`, `MONKEY.001` y la música de las pistas de audio, sin programas aparte ni ficheros que renombrar. En la ventana, botón «Imagen de CD…». Un `.iso` solo lleva los datos (sin música); `.mds`/`.mdf`, `.nrg` y `.chd` hay que pasarlas antes a `.cue`/`.bin`.
 
 ### Qué hace
 
@@ -21,9 +25,9 @@ Probado con ***The Secret of Monkey Island*** en su versión CD (VGA): jugado de
 
 ### Cómo se usa
 
-1. Descarga `ScummNext-20261030.zip` y descomprímelo.
+1. Descarga `ScummNext-20261030b.zip` y descomprímelo.
 2. Abre `ConversorScumm.exe`. No está firmado: si Windows avisa, pulsa «Más información» y «Ejecutar de todas formas».
-3. Pulsa «Convertir un juego…» y elige la carpeta donde están `MONKEY.000` y `MONKEY.001`.
+3. Pulsa «Convertir un juego…» y elige la carpeta donde están `MONKEY.000` y `MONKEY.001` («Carpeta…») o la imagen del CD («Imagen de CD…»).
 4. Copia la carpeta de trabajo (de serie, `Documentos\ScummNext`) a la SD del Next.
 5. En el Next, abre `scumm.nex` desde el navegador.
 
@@ -45,8 +49,8 @@ Monkey Island, SCUMM y LucasArts son marcas de Lucasfilm Ltd. ScummVM es una mar
 
 ### English
 
-**ScummNext** is a **SCUMM v5** adventure game interpreter for the **ZX Spectrum Next**, written in Z80N assembly, plus a Windows converter that prepares the files from your own copy of the game. It has been tested with *The Secret of Monkey Island* (CD/VGA version), played from start to finish on real hardware. **No game data is included: you need your own original copy** (`MONKEY.000`, `MONKEY.001` and, for music, the CD audio tracks). It needs a 2 MB Next. The converter and the documentation are in Spanish. Licensed under GPL v3 or later; based on ScummVM's work.
+**ScummNext** is a **SCUMM v5** adventure game interpreter for the **ZX Spectrum Next**, written in Z80N assembly, plus a Windows converter that prepares the files from your own copy of the game. It has been tested with *The Secret of Monkey Island* (CD/VGA version), played from start to finish on real hardware. **No game data is included: you need your own original copy** (`MONKEY.000`, `MONKEY.001` and, for music, the CD audio tracks), or a CD image of it (`.cue`/`.bin`, CloneCD `.ccd`/`.img` or `.iso`), which the converter now reads directly. It needs a 2 MB Next. The converter and the documentation are in Spanish. Licensed under GPL v3 or later; based on ScummVM's work.
 
 ---
 
-`ScummNext-20261030.zip` · SHA-256 `18f5dc6b5c7f7c3d243efdcb12705219f789c6f5366a97d6d63ad9dffce3ae99`
+`ScummNext-20261030b.zip` · SHA-256 `5ff0dee90d5323bbfe960e69ef1e152e7fcae9b92aeff340f852160516cdbb60`

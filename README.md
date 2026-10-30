@@ -152,7 +152,8 @@ píxel contra el modelo de referencia.
 
 Necesitas los ficheros `MONKEY.000` y `MONKEY.001` de tu CD (la versión CD/VGA
 usa SCUMM v5). Ponlos en `original/`, con las pistas de música si las tienes
-(más abajo). En Windows también se puede hacer todo con una ventana: mira
+(más abajo), o usa directamente una imagen del CD (más abajo también). En
+Windows también se puede hacer todo con una ventana: mira
 [El conversor con ventana](#el-conversor-con-ventana-windows).
 
 ```bash
@@ -190,6 +191,25 @@ y abre `scumm.nex` desde el navegador. Hace falta un Next de 2 MB.
 
 **`original/` y `build/sd` llevan los gráficos y los textos de tu juego: son
 para tu uso, no para repartirlos.**
+
+### Desde una imagen del CD
+
+En lugar de la carpeta se le puede dar la imagen del CD: el conversor saca de
+ella `MONKEY.000`, `MONKEY.001` y la música de las pistas de audio, sin
+programas aparte ni ficheros que renombrar (`tools/cdimage.py`).
+
+```bash
+python tools/convert.py "Monkey Island.cue" MONKEY build/sd
+```
+
+Entiende `.cue` con sus `.bin`, `.img` o `.wav` (uno para todo el disco o uno
+por pista), CloneCD (`.ccd` con su `.img`) e `.iso`. Si se le da el `.bin`,
+`.img` o `.iso` y al lado está su `.cue` o `.ccd`, lo usa. Un `.iso`, o un
+`.bin` o `.img` sin hoja, solo tiene los datos: sin música, salvo que estén al
+lado los `TrackN.flac`. Cada pista va de su `INDEX 01` al principio de la
+siguiente, sin los 2 segundos de silencio que las separan, y la pista *n* del
+juego es la *n*+1 del disco, como en ScummVM con el CD de verdad. No entiende
+`.mds`/`.mdf`, `.nrg` ni `.chd`: hay que pasarlos antes a `.cue`/`.bin`.
 
 El juego empieza por su script de inicio, como en el original. Para ver qué
 hay en los ficheros:
@@ -291,8 +311,9 @@ ScummNext/
   `PROGRESO.DAT`, sus partidas guardadas y el informe de la conversión.
   «Reconvertir» lo repite (con un `scumm.nex` o un conversor nuevos);
   «Quitar…» manda la carpeta a la papelera.
-- «Convertir un juego…» pide la carpeta del original (donde estén `.000` y
-  `.001`, y las pistas del CD), dice qué juego es (versión, habitaciones,
+- «Convertir un juego…» pide el original: la carpeta (donde estén `.000` y
+  `.001`, y las pistas del CD) o la imagen del CD (`.cue`, `.ccd`, `.iso`,
+  `.img` o `.bin`, con «Imagen de CD…»). Dice qué juego es (versión, habitaciones,
   pistas encontradas) y deja elegir el nombre del menú (hasta 31 letras), la
   carpeta en la SD (hasta 8, en mayúsculas), si llevar la música, el
   protagonista y la primera habitación (como `--costume` y `--room`) y un
@@ -873,6 +894,7 @@ tools/progreso.py   PROGRESO.DAT: el % de cada partida en el menú, desde una pa
 tools/adlib.py      los sonidos de AdLib (iMuse) como los toca ScummVM: escrituras en el OPL2 y el audio
 tools/opl2.py       un OPL2 (el chip de AdLib) en Python, para sintetizarlos al convertir
 tools/sound.py      el sonido: los recursos, SOUNDS.DAT, las pistas del CD y lo que ven los scripts
+tools/cdimage.py    el original dentro de una imagen del CD (.cue, .ccd, .iso, .img, .bin)
 tools/model.py      modelo de referencia: cajas, andar, animaciones, cámara, actores en tiles y pantalla
 tools/vm.py         modelo de la máquina virtual de SCUMM v5
 tools/ui.py         modelo de la interfaz: textos, verbos, cursor, frases, inventario

@@ -16,6 +16,7 @@
 import os
 import struct
 
+import cdimage as CI
 import scumm as S
 
 NONE, CD, SBL, ADL, ROL = 0, 1, 2, 3, 4
@@ -46,6 +47,12 @@ def ceil_div(a, b):
 # Pistas del CD
 # ---------------------------------------------------------------------------
 def track_file(folder, track):
+    """El audio de una pista: un fichero (TrackN.fla/.flac/.wav) o, si folder es una imagen
+    de CD (o la carpeta que sale de ella), su pista (cdimage.PistaCD)."""
+    p = CI.pista(folder, track)
+    if p is not None:
+        return p
+    folder = CI.directorio(folder)
     for name in ("Track%d" % track, "track%d" % track, "Track%02d" % track, "track%02d" % track):
         for ext in (".fla", ".flac", ".wav"):
             p = os.path.join(folder, name + ext)
@@ -55,7 +62,9 @@ def track_file(folder, track):
 
 
 def track_seconds(path):
-    """Duracion de una pista (FLAC: STREAMINFO; WAV: cabecera)."""
+    """Duracion de una pista (FLAC: STREAMINFO; WAV: cabecera; de una imagen: sus sectores)."""
+    if hasattr(path, "seconds"):
+        return path.seconds()
     with open(path, "rb") as f:
         d = f.read(4096)
     if d[:4] == b"fLaC":
@@ -287,8 +296,11 @@ MUSIC_DRIVE = 2.5       # el CD va flojo (picos de 0,44 a 0,66): x 2,5 y un limi
 
 
 def read_track(path):
-    """(muestras en coma flotante -1..1, mono; frecuencia) de un FLAC o un WAV."""
+    """(muestras en coma flotante -1..1, mono; frecuencia) de un FLAC, un WAV o una pista
+    de una imagen de CD."""
     import numpy as np
+    if hasattr(path, "read"):
+        return path.read()
     if path.lower().endswith(".wav"):
         import wave
         with wave.open(path, "rb") as f:

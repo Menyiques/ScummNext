@@ -24,6 +24,7 @@ from tkinter import filedialog, messagebox, simpledialog, ttk
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import biblioteca as B  # noqa: E402
+import cdimage as CI  # noqa: E402
 
 APP = "ScummNext: conversor de juegos SCUMM para el Next"
 CONF = os.path.join(os.environ.get("APPDATA") or os.path.expanduser("~"), "ConversorScumm", "config.json")
@@ -381,16 +382,20 @@ class Convertir(tk.Toplevel):
         f = ttk.Frame(self, padding=12)
         f.pack(fill="both", expand=True)
         r = 0
-        ttk.Label(f, text="Carpeta del original").grid(row=r, column=0, sticky="w", pady=3)
+        ttk.Label(f, text="Original").grid(row=r, column=0, sticky="w", pady=3)
         e = ttk.Entry(f, textvariable=self.v_origen)
         e.grid(row=r, column=1, sticky="we", pady=3)
         e.bind("<Return>", lambda ev: self.detectar())
         e.bind("<FocusOut>", lambda ev: self.detectar())
-        ttk.Button(f, text="Examinar…", command=self.examinar).grid(row=r, column=2, padx=(6, 0))
+        bo = ttk.Frame(f)
+        bo.grid(row=r, column=2, padx=(6, 0))
+        ttk.Button(bo, text="Carpeta…", command=self.examinar).pack(side="left")
+        ttk.Button(bo, text="Imagen de CD…", command=self.examinar_imagen).pack(side="left", padx=(4, 0))
         r += 1
         self.c_nombre = ttk.Combobox(f, textvariable=self.v_nombre, state="readonly", width=12)
         self.c_nombre.bind("<<ComboboxSelected>>", lambda ev: self._elegido())
-        self.l_det = ttk.Label(f, text="Elige la carpeta donde están NOMBRE.000 y NOMBRE.001 (y las pistas del CD).",
+        self.l_det = ttk.Label(f, text="Elige la carpeta donde están NOMBRE.000 y NOMBRE.001 (y las pistas del CD), "
+                               "o la imagen del CD (.cue, .ccd, .iso, .img o .bin).",
                                foreground=GRIS, wraplength=440, justify="left")
         self.l_det.grid(row=r, column=1, columnspan=2, sticky="w", pady=(0, 8))
         r += 1
@@ -490,13 +495,27 @@ class Convertir(tk.Toplevel):
             guardar_conf(self.ventana.conf)
             self.detectar()
 
+    def examinar_imagen(self):
+        o = self.v_origen.get()
+        p = filedialog.askopenfilename(
+            parent=self, title="La imagen del CD original",
+            initialdir=os.path.dirname(o) if CI.es_imagen(o) else (o or self.ventana.conf.get("origen")),
+            filetypes=[("Imágenes de CD", "*.cue *.ccd *.iso *.img *.bin"), ("Todos", "*.*")])
+        if p:
+            self.v_origen.set(os.path.normpath(p))
+            self.ventana.conf["origen"] = os.path.dirname(self.v_origen.get())
+            guardar_conf(self.ventana.conf)
+            self.detectar()
+
     def detectar(self):
         o = self.v_origen.get().strip()
         if not o or getattr(self, "_detectado", None) == o or (self.tarea and self.tarea.viva):
             return
         self._detectado = o
-        if not os.path.isdir(o):
-            self.l_det.configure(text="Esa carpeta no existe.", foreground=ROJO)
+        if not os.path.isdir(o) and not CI.es_imagen(o):
+            self.l_det.configure(text="No existe esa carpeta ni esa imagen de CD." if not os.path.exists(o)
+                                 else "Eso no es una carpeta ni una imagen de CD (.cue, .ccd, .iso, .img o .bin).",
+                                 foreground=ROJO)
             return
         self.l_det.configure(text="Mirando…", foreground=GRIS)
         self.tarea = Tarea(self, lambda av, lg: B.detectar(o), al_final=self._detectado_fin)
@@ -507,7 +526,8 @@ class Convertir(tk.Toplevel):
             return
         self.detectados = r or []
         if not self.detectados:
-            self.l_det.configure(text="No hay ningún NOMBRE.000 en esa carpeta.", foreground=ROJO)
+            self.l_det.configure(text="No hay ningún NOMBRE.000 en %s." % ("la imagen" if CI.es_imagen(
+                self.v_origen.get().strip()) else "esa carpeta"), foreground=ROJO)
             self.c_nombre.grid_forget()
             return
         nombres = [d["nombre"] for d in self.detectados]
@@ -567,10 +587,10 @@ class Convertir(tk.Toplevel):
 
     def _opciones(self):
         o = self.v_origen.get().strip()
-        if not o or not os.path.isdir(o):
-            raise ValueError("Elige la carpeta del original.")
+        if not o or not (os.path.isdir(o) or CI.es_imagen(o)):
+            raise ValueError("Elige la carpeta o la imagen de CD del original.")
         if not self.detectados:
-            raise ValueError("En esa carpeta no hay ningún juego.")
+            raise ValueError("Ahí no hay ningún juego.")
         return dict(origen=o, nombre=self.v_nombre.get() or None,
                     costume=self._numero(self.v_cost, "Protagonista"),
                     habitacion=self._numero(self.v_sala, "Primera habitación"))
